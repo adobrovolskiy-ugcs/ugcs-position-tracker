@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        createLocationRequest();
     }
 
     @Override
@@ -75,33 +76,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSION_REQUEST_CODE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainActivity.this, "Permission granted!", Toast.LENGTH_LONG).show();
-                    // permission was granted
-                    checkLocationSettings();
-                } else {
-                    Toast.makeText(MainActivity.this, "Permission denied.", Toast.LENGTH_LONG).show();
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSION_REQUEST_CODE) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission was granted
+                Toast.makeText(MainActivity.this, "Permission granted!", Toast.LENGTH_LONG).show();
+                // we will check location services settings and start receiving location changes
+                checkLocationSettings();
+            } else {
+                // user decided not to give permission
+                Toast.makeText(MainActivity.this, "Permission denied.", Toast.LENGTH_LONG).show();
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
         }
     }
 
     // Checks location settings
+    // If settings are OK, starts receiving location updates
+    // Otherwise requests permission from user
     private void checkLocationSettings() {
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(createLocationRequest());
+                .addLocationRequest(mLocationRequest);
 
         SettingsClient client = LocationServices.getSettingsClient(MainActivity.this);
 
@@ -160,15 +158,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private LocationRequest createLocationRequest() {
+    // Creates LocationRequest object and stores it in mLocationRequest field
+    private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        return mLocationRequest;
     }
 
+    // Gets last known location of the device and starts receiving regular position updates
     private void startLocationUpdates() {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -191,10 +189,10 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    dumpLocation( location);
-                    setViewText( R.id.lbLocationUpdatesCounter, ++mLocationUpdatesCounter);
+                    dumpLocation(location);
+                    setViewText(R.id.lbLocationUpdatesCounter, ++mLocationUpdatesCounter);
 
-                    if( mLocationUpdatesCounter == Integer.MAX_VALUE)
+                    if (mLocationUpdatesCounter == Integer.MAX_VALUE)
                         mLocationUpdatesCounter = 0;
                 }
             }
@@ -206,13 +204,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Stops receiving of regular location updates
     private void stopLocationUpdates() {
-        if( mFusedLocationClient != null && mLocationCallback != null) {
+        if (mFusedLocationClient != null && mLocationCallback != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
             mLocationUpdatesCounter = 0;
         }
     }
 
+    // Displays location data in UI
     private void dumpLocation(Location location) {
         if (location != null) {
 
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
+    /*
      * Called when the user taps the Send button
      */
     /*
