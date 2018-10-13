@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">UgCS Position Tracker</string>
     <string name="not_available">not available</string>
+    <string name="send_message">Send message</string>
+    <string name="msg_text_hint">Type message text here or use predefined messages below</string>
+    <string name="ok_message">I am OK</string>
+    <string name="help_me_message">Help me!</string>
+    <string name="found_message">Found!</string>
 </resources>

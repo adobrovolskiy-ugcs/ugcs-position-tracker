@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -227,25 +228,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setViewText(int viewId, @NonNull String value) {
+    // Sets text in ViewText
+    private <T> void setViewText(int viewId, T value) {
         TextView textView = findViewById(viewId);
         if (textView != null) {
-            textView.setText(value);
+            textView.setText(String.valueOf(value));
         }
     }
 
-    private void setViewText(int viewId, double value) {
-        setViewText(viewId, String.valueOf(value));
-    }
-
-    private void setViewText(int viewId, float value) {
-        setViewText(viewId, String.valueOf(value));
-    }
-
-    private void setViewText(int viewId, int value) {
-        setViewText(viewId, String.valueOf(value));
-    }
-
+    // Returns number of satellites from Location object
     private int getNumberOfSatellites(Location location) {
         Bundle bundle = location.getExtras();
         if (bundle != null)
@@ -255,23 +246,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /*
-     * Called when the user taps the Send button
-     */
-    /*
-    public void sendMessage(View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
+    public void openSendMessageActivity(View view) {
+        Intent intent = new Intent(this, SendMessageActivity.class);
         startActivity(intent);
     }
-
-    public void openLocationMonitor(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-
-    }
-    */
-
 }
