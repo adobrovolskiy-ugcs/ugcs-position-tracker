@@ -141,14 +141,14 @@ public class MainActivity extends AppCompatActivity {
                 switch (resultCode) {
                     case Activity.RESULT_OK: {
                         // All required changes were successfully made
-                        Toast.makeText(MainActivity.this, "Location enabled by user!", Toast.LENGTH_LONG).show();
+                        showToast( "Location enabled by user!");
                         // Start getting coordinates
                         startLocationUpdates();
                         break;
                     }
                     case Activity.RESULT_CANCELED: {
                         // The user was asked to change settings, but chose not to
-                        Toast.makeText(MainActivity.this, "Location not enabled, user cancelled.", Toast.LENGTH_LONG).show();
+                        showToast( "Location not enabled, user cancelled.");
                         break;
                     }
                     default: {
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                 mLocationCallback,
-                null /* Looper */);
+                null);
 
     }
 
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Displays location data in UI
-    private void dumpLocation(Location location) {
+    private void dumpLocation(@NonNull Location location) {
         if (location != null) {
 
             setViewText(R.id.lbLatitude, Location.convert(location.getLatitude(), Location.FORMAT_SECONDS));
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Returns number of satellites from Location object
-    private int getNumberOfSatellites(Location location) {
+    private int getNumberOfSatellites(@NonNull Location location) {
         Bundle bundle = location.getExtras();
         if (bundle != null)
             return bundle.getInt("satellites");
@@ -245,9 +245,14 @@ public class MainActivity extends AppCompatActivity {
             return 0;
     }
 
-
+    // Opens activity to send messages to UgCS server
     public void openSendMessageActivity(View view) {
         Intent intent = new Intent(this, SendMessageActivity.class);
         startActivity(intent);
+    }
+
+    // Displays message on the screen
+    private void showToast(@NonNull CharSequence text) {
+        Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
     }
 }

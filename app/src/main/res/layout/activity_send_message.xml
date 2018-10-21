@@ -26,6 +26,7 @@
             android:id="@+id/buttonSendTextMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onSendTextMessage"
             android:text="@string/send_message" />
 
         <Button
@@ -35,6 +36,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="40dp"
             android:layout_marginRight="40dp"
+            android:onClick="onSendOkMessage"
             android:text="@string/ok_message" />
 
         <Button
@@ -44,6 +46,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="40dp"
+            android:onClick="onSendHelpMeMessage"
             android:text="@string/help_me_message" />
 
         <Button
@@ -53,6 +56,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="40dp"
+            android:onClick="onSendFoundMessage"
             android:text="@string/found_message" />
 
     </LinearLayout>
